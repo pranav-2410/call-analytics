@@ -73,3 +73,10 @@ create policy "allow anon update" on public.user_chart_values for update using (
 2. In Vercel dashboard, create a new project → import from GitHub.
 3. Set environment variables in Vercel: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 4. Build command: `npm run build` and Output directory: `dist`.
+
+<img width="1710" height="775" alt="image" src="https://github.com/user-attachments/assets/a520f4e6-2560-4418-a1ff-3f04d7ee81cc" />
+
+<img width="1700" height="953" alt="image" src="https://github.com/user-attachments/assets/53182df5-eb62-4569-a102-bebf890708a9" />
+
+<img width="1598" height="517" alt="image" src="https://github.com/user-attachments/assets/b41e092f-25d2-496b-a573-90777d16e02c" />
+
