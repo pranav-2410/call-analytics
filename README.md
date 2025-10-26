@@ -77,3 +77,6 @@ create policy "allow anon update" on public.user_chart_values for update using (
 <img width="1710" height="775" alt="image" src="https://github.com/user-attachments/assets/a520f4e6-2560-4418-a1ff-3f04d7ee81cc" />
 
 <img width="1700" height="953" alt="image" src="https://github.com/user-attachments/assets/53182df5-eb62-4569-a102-bebf890708a9" />
+
+<img width="1598" height="517" alt="image" src="https://github.com/user-attachments/assets/b41e092f-25d2-496b-a573-90777d16e02c" />
+
