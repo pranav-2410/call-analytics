@@ -6,6 +6,9 @@ A demo React + TypeScript frontend for the Full Stack assessment:
 - Fetches previous values and prompts before overwriting
 - Built with Vite, TailwindCSS, Recharts, Supabase JS
 
+## Quick start (Deployed) 
+Live API: https://call-analytics-production-3d15.up.railway.app/
+
 ## Quick start (local)
 
 1. Unzip the project and `cd` into it:
