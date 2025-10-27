@@ -37,11 +37,9 @@ export default function Dashboard({ email }: Props) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [tempValue, setTempValue] = useState<string>("");
 
-  useEffect(() => { fetchExisting(); /* eslint-disable-next-line */ }, [email]);
-
-  const fetchExisting = async () => {
+const fetchExisting = async () => {
     setLoading(true);
-    const { data: rows, error } = await supabase
+    const { data: row, error } = await supabase
       .from("user_chart_values")
       .select("*")
       .eq("email", email)
@@ -51,16 +49,18 @@ export default function Dashboard({ email }: Props) {
 
     if (error) {
       console.error(error);
-    } else if (rows) {
-      setHasExisting(true);
-      setExistingRow(rows as UserChartRow);
-      try {
-        const parsed = (rows as any).chart_data;
-        if (parsed && Array.isArray(parsed)) {
-          setData(parsed);
-        }
-      } catch (err) {
-        console.warn("failed parse", err);
+      setHasExisting(false);
+      setExistingRow(null);
+      setData(defaultData);
+    } else if (row && row.chart_data) {
+      const parsedData = typeof row.chart_data === "string" 
+        ? JSON.parse(row.chart_data)
+        : row.chart_data;
+
+      if (Array.isArray(parsedData)) {
+        setHasExisting(true);
+        setExistingRow(row);
+        setData(parsedData);
       }
     } else {
       setHasExisting(false);
@@ -69,6 +69,15 @@ export default function Dashboard({ email }: Props) {
     }
     setLoading(false);
   };
+
+  {loading && (
+  <div className="absolute top-2 right-2 text-xs text-slate-400 italic">
+    Fetching data...
+  </div>
+)}
+  useEffect(() => {
+  fetchExisting();
+  }, [email]);
 
   const onUseExisting = () => {
     if (existingRow) {
@@ -84,9 +93,10 @@ export default function Dashboard({ email }: Props) {
       chart_data: data
     };
 
-    const { error } = await supabase.from("user_chart_values").upsert(payload, {
+    const { error } = await supabase.from("user_chart_values").upsert([payload], {
       onConflict:  "email,chart_key"
     });
+
 
     if (error) {
       console.error(error);
@@ -123,8 +133,8 @@ export default function Dashboard({ email }: Props) {
             <div className="text-sm text-slate-300">Agent: All</div>
           </div>
           <div style={{ width: "100%", height: 240 }}>
-            <ResponsiveContainer>
-              <AreaChart data={data}>
+            <ResponsiveContainer key={`${email}-${data.length}`}>
+            <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorCalls" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.8} />
@@ -146,8 +156,8 @@ export default function Dashboard({ email }: Props) {
             <div className="text-sm text-slate-300">Editable values</div>
           </div>
           <div style={{ width: "100%", height: 240 }}>
-            <ResponsiveContainer>
-              <BarChart data={data}>
+            <ResponsiveContainer key={`${email}-${data.map(d => d.calls).join(',')}`}>
+            <BarChart data={data}>
                 <CartesianGrid opacity={0.08} />
                 <XAxis dataKey="name" />
                 <YAxis />
